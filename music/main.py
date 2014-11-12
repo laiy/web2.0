@@ -8,6 +8,7 @@ from tornado.options import define, options
 define("port", default=2333, help="run on the given port", type=int)
 
 class file:
+    __slots__ = ('__name', '__size', '__filetype')
     def __init__(self, name, filetype, size):
         self.__name = name
         self.__filetype = filetype
@@ -23,7 +24,6 @@ class file:
         return self.__name
     def getSize(self):
         return self.__size
-
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
