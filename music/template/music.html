@@ -17,17 +17,24 @@
 
     <div id="listarea">
       <ul id="musiclist">
+        {% if goBack == 'True' %}
+            <li class="playlistfile" style="list-style: none;">
+                <a href="/">
+                    goBack
+                </a>
+            </li>
+        {% end %}
         {% for file in files %}
-          {% if file.filetype == 'mp3' %}
+          {% if file.getFiletype() == 'mp3' %}
             <li class="mp3item">
-              <a href="{{ static_url("songs") }}/{{ file.name }}">{{ file.name }}</a>
-              <span>{{ file.size }}<span>
+              <a href="{{ static_url("songs") }}/{{ file.getName() }}">{{ file.getName() }}</a>
+              <span>({{ file.getSize() }})<span>
             </li>
           {% end %}
-          {% if file.filetype == 'txt' %}
+          {% if file.getFiletype() == 'txt' %}
             <li class="playlistfile">
-              <a href="?playlist={{ file.name }}">
-                {{ file.name }}
+              <a href="?playlist={{ file.getName() }}">
+                {{ file.getName() }}
               </a>
             </li>
           {% end %}

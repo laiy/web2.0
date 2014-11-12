@@ -9,14 +9,21 @@ define("port", default=2333, help="run on the given port", type=int)
 
 class file:
     def __init__(self, name, filetype, size):
-        self.name = name
-        self.filetype = filetype;
+        self.__name = name
+        self.__filetype = filetype
         if size < 1024:
-            self.size = "%d b" % size
+            self.__size = "%.2f b" % size
         elif size < 1024 * 1024:
-            self.size = "%d kb" % (size / 1024)
+            self.__size = "%.2f kb" % (float(size) / 1024)
         else:
-            self.size = "%d mb" % (size / (1024 * 1024))
+            self.__size = "%.2f mb" % (float(size) / (1024 * 1024))
+    def getFiletype(self):
+        return self.__filetype
+    def getName(self):
+        return self.__name
+    def getSize(self):
+        return self.__size
+
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
@@ -29,8 +36,9 @@ class IndexHandler(tornado.web.RequestHandler):
             filenames = os.listdir(filepath)
         for filename in filenames:
             files.append(file(filename, os.path.splitext(filename)[1][1:], os.path.getsize(os.path.join(filepath, filename))))
-        files.sort(key=lambda x:(x.filetype, x.name))
-        self.render('music.html', files=files)
+        files.sort(key=lambda x:(x.getFiletype(), x.getName()))
+        goBack = 'Flase' if playlist is 'None' else 'True'
+        self.render('music.html', files=files, goBack=goBack)
 
 if __name__ == '__main__':
     tornado.options.parse_command_line()
