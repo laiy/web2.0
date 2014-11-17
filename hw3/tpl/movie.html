@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>{{ movieInfo.title }} - Rancid Tomatoes</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="{{ static_url("css/movie.css") }}" type="text/css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<div id="banner">
+			<img src="{{ static_url("img/banner.png") }}" alt="Rancid Tomatoes" />
+		</div>
+
+		<h1>{{ movieInfo.title }} ({{ movieInfo.year }})</h1>
+
+		<div id="content">
+			<div id="sidebar">
+				{% set movieImg = "movies/" + movieInfo.dir + "/generaloverview.png" %}
+				<img src="{{ static_url(movieImg) }}" alt="general overview" />
+                <dl>
+                    {% for pairs in overview %}
+                    <dt>{% raw pairs[0] %}</dt>
+                    <dd>{% raw pairs[1] %}</dd>
+                    {% end %}
+                </dl>
+			</div>
+
+			<div id="review-area">
+				<div id="overall">
+				{% if int(movieInfo.rating) < 60 %}
+					<img src="{{ static_url("img/rottenbig.png") }}" alt="Rotten" />
+				{% else %}
+					<img src="{{ static_url("img/freshbig.png") }}" alt="Fresh" />
+				{% end %}
+					<span id="overall-rating"><span id="rating">{{ movieInfo.rating }}%</span> ({{ movieInfo.total }} reviews total)</span>
+				</div>
+
+				<div id="first-column">
+					{% module Reviews(reviews.left) %}
+				</div>
+
+				<div id="second-column">
+					{% module Reviews(reviews.right) %}
+				</div>
+			</div>
+
+			<p id="footer">(1-{{ reviews._len }}) of {{ movieInfo.total }}</p>
+		</div>
+		<!-- Main content ends -->
+
+		<!-- Validators -->
+		<div id="validators">
+			<a href="http://validator.w3.org/check/referer"><img src="http://www.cs.washington.edu/education/courses/cse190m/09sp/homework/2/w3c-xhtml.png" alt="Valid XHTML 1.1" /></a> <br />
+			<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="http://www.cs.washington.edu/education/courses/cse190m/09sp/homework/2/w3c-css.png" alt="Valid CSS!" /></a>
+		</div>
+
+	</body>
+</html>
