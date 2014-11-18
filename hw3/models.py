@@ -46,10 +46,10 @@ class IndexHandler(tornado.web.RequestHandler):
         filePath = os.path.join(os.path.dirname(__file__), 'assets', 'movies', film)
         movieInfo = MovieInfo(filePath)
         overviewsData = open(os.path.join(filePath, 'generaloverview.txt'))
-        overviews= list()
-        for line in overviewsData:
-            (term, sep, data) = line.partition(':')
-            overviews.append((term, data))
+        overviews = []
+        for overview in overviewsData:
+            (head, sep, inside) = overview.partition(':')
+            overviews.append((head, inside))
         reviews = Reviews(filePath)
         self.render('movie.html', movieInfo=movieInfo, overviews=overviews, reviews=reviews)
 
