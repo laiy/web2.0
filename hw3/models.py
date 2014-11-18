@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-#	> File Name: moveInfo.py
+#	> File Name: models.py
 #	> Author: LY
 #	> Mail: ly.franky@gmail.com
 #	> Created Time: Monday, November 17, 2014 PM07:59:52 CST
@@ -45,12 +45,11 @@ class IndexHandler(tornado.web.RequestHandler):
         film = self.get_argument('film', 'tmnt')
         filePath = os.path.join(os.path.dirname(__file__), 'assets', 'movies', film)
         movieInfo = MovieInfo(filePath)
-        overviews = open(os.path.join(filePath, 'generaloverview.txt'))
-        overview = list()
-        for line in overviews:
-            line = line.strip()
+        overviewsData = open(os.path.join(filePath, 'generaloverview.txt'))
+        overviews= list()
+        for line in overviewsData:
             (term, sep, data) = line.partition(':')
-            overview.append((term, data))
+            overviews.append((term, data))
         reviews = Reviews(filePath)
-        self.render('movie.html', movieInfo=movieInfo, overview=overview, reviews=reviews)
+        self.render('movie.html', movieInfo=movieInfo, overviews=overviews, reviews=reviews)
 
