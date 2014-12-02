@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<!-- CSE 190 M Homework 4 (NerdLuv) -->
+	<head>
+		<title>NerdLuv</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <link href="{{ static_url("images/heart.gif") }}" type="image/gif" rel="shortcut icon" />
+        <link href="{{ static_url("css/nerdluv.css") }}" type="text/css" rel="stylesheet" />
+	</head>
+
+	<body>
+	
+		<div id="main">
+            <div id="bannerarea">
+                <img src="{{ static_url("images/nerdluv.png") }}" alt="banner logo" /> <br />
+                where meek geeks meet
+            </div>
+			New User Signup:
+            <form method="POST">
+
+                <div>
+                    <strong>Name:</strong>
+                    <input type="TEXT" name="name" size="16" />
+                </div>
+
+                <div>
+                    <strong>Gender:</strong>
+                    <input type="radio" value="M" name="gender" /> Male
+                    <input type="radio" value="F" name="gender" checked /> Female
+                </div>
+
+                <div>
+                    <strong>Age:</strong>
+                    <input type="TEXT" name="age" size="5" maxlength="2" />
+                </div>
+
+                <div>
+                    <strong>Personality type:</strong>
+                    <input type="TEXT" name="type" size="5" maxlength="4" />
+                    (<a href="http://www.humanmetrics.com/cgi-win/JTypes2.asp">Don't know your type?</a>)
+                </div>
+
+                <div>
+                    <strong>Favorite OS:</strong>
+                    <select name="favoriteOS" >
+                        <option value="windows">Windows</option>
+                        <option value="Mac OS X">Mac OS X</option>
+                        <option value="Linux">Linux</option>
+                        <option value="other">other</option>
+                    </select>
+                </div>
+
+
+                <div id="seeking">
+                    <strong>Seeking:</strong>
+                    <input type="CHECKBOX" name="Male" checked > Male
+                    <input type="CHECKBOX" name="Female" /> Female
+                </div>
+
+                <div>
+                    <strong>Between ages:</strong>
+                    <input type="TEXT" name="age_from" size="5" maxlength="2" />
+                    and
+                    <input type="TEXT" name="age_to" size="5" maxlength="2" />
+                </div>
+
+                <div>
+                    <input type="submit" value="Sign Up" />
+                </div>
+            </form>
+		</div>
+		
+		<p>
+			Results and page (C) Copyright 2009 NerdLuv Inc.
+		</p>
+
+		<div id="w3c">
+			<a href="http://validator.w3.org/check/referer">
+				<img src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" /></a>
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS" /></a>
+		</div>
+	</body>
+</html>
+
+	
