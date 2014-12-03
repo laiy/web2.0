@@ -24,6 +24,24 @@ class IndexHandler(tornado.web.RequestHandler):
         age_from = self.get_argument('age_from', None)
         age_to = self.get_argument('age_to', None)
         seeking = 'MF' if Male and Female else 'M' if Male else 'F'
+        errorLog = ''
+        if not name:
+            errorLog += 'Name is empty.'
+        if age < '0' or age > '99' or not age.isdigit():
+            errorLog += 'Bad age.'
+        if gender  != 'M' and gender != 'F':
+            errorLog += 'Bad gender.'
+        if not re.match(r'[IE]{1}[NS]{1}[FT]{1}[JP]{1}', type):
+            errorLog += 'Bad type.'
+        if favoriteOS != 'Windows' and favoriteOS != 'Mac OS X' and favoriteOS != 'Linux' and favoriteOS != 'other':
+            errorLog += 'Bad OS.'
+        if seeking is not 'MF' and seeking is not 'M' and seeking is not 'F':
+            errorLog += 'Bad seeking.'
+        if age_from > age_to or age_from < '0' or age_from > '99' or not age_from.isdigit() or age_to < '0' or age_to > '99' or not age_to.isdigit():
+            errorLog += 'Bad age from and to.'
+        if errorLog is not '':
+            self.render('results.html', errorLog=errorLog, matchs='')
+            return
         personsData = open(os.path.join(os.path.dirname(__file__), 'assets', 'singles.txt'), 'r')
         matchs = []
         for personalMsg in personsData:
@@ -44,10 +62,17 @@ class IndexHandler(tornado.web.RequestHandler):
         f = open(os.path.join(os.path.dirname(__file__), 'assets', 'singles.txt'), 'a')
         f.write(','.join([name, gender, age, type, favoriteOS, seeking, age_from, age_to]) + '\n')
         f.close()
-        self.render('results.html', matchs=matchs, replace=replace)
+        self.render('results.html', matchs=matchs, replace=replace, errorLog='')
 
 def replace(name):
-    return name.replace(' ', '_').lower()
+    filePath = os.path.join(os.path.dirname(__file__), 'assets', 'images')
+    filenames = os.listdir(filePath)
+    newName = name.replace(' ', '_').lower()
+    if newName + '.jpg' in filenames:
+        return newName
+    else:
+        return 'default_user'
+
 
 class PersonMsg(object):
     def __init__(self, infos):
