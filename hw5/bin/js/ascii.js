@@ -33,9 +33,9 @@
     $('#stop').click(function() {
       if (animation) {
         clearInterval(interval);
-        $('#displayarea').val(ANIMATIONS[$('#animation').val()]);
         animation = false;
         frame = -1;
+        $('#displayarea').val(ANIMATIONS[$('#animation').val()]);
         $('#stop').attr('disabled', true);
         $('#start').attr('disabled', false);
         return $('#animation').attr('disabled', false);

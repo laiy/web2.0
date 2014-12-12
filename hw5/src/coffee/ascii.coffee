@@ -21,19 +21,23 @@ $ ->
 
     $('#animation').change ->
         $('#displayarea').val ANIMATIONS[$('#animation').val()]
-        animation = false, frame = -1
+        animation = false
+        frame = -1
 
     $('#start').click ->
         if not animation
             frameContainer = $('#displayarea').val().split '=====\n'
-            interval = setInterval autoPlay, itv, animation = true
+            interval = setInterval autoPlay, itv
+            animation = true
             $('#stop').attr 'disabled', false
             $('#start').attr 'disabled', true
             $('#animation').attr 'disabled', true
 
     $('#stop').click ->
         if animation
-            clearInterval interval, animation = false, frame = -1
+            clearInterval interval
+            animation = false
+            frame = -1
             $('#displayarea').val ANIMATIONS[$('#animation').val()]
             $('#stop').attr 'disabled', true
             $('#start').attr 'disabled', false
