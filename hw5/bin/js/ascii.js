@@ -44,8 +44,7 @@
     $('#speed').click(function() {
       itv = $('#speed').attr('checked') === 'checked' ? 50 : 200;
       if (animation) {
-        clearInterval(interval);
-        return interval = setInterval(autoPlay, itv);
+        return clearInterval(interval, interval = setInterval(autoPlay, itv));
       }
     });
     return autoPlay = function() {
