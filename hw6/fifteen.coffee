@@ -13,9 +13,9 @@ class Maze
         @pieces.push piece
 
     initialize: ->
-        @.initializeDataStructure()
-        @.initializePieceElement()
-        @.updatePosition()
+        @initializeDataStructure()
+        @initializePieceElement()
+        @updatePosition()
 
     initializeDataStructure: ->
         col = 1
@@ -24,19 +24,19 @@ class Maze
             row = 1
             while row < 5
                 piece = new Piece col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]
-                @.push piece
+                @push piece
                 row++
             col++
 
     initializePieceElement: ->
-        for piece in @.pieces
+        for piece in @pieces
             if piece.element isnt undefined
                 piece.element.style.backgroundPosition = -(piece.row - 1) * 96 + "px " + -(piece.col - 1) * 96 + "px"
      
     updatePosition: ->
-        blankCol = Math.ceil @.blankPosition / 4
-        blankRow = if @.blankPosition % 4 then @.blankPosition % 4 else 4
-        for piece in @.pieces
+        blankCol = Math.ceil @blankPosition / 4
+        blankRow = if @blankPosition % 4 then @blankPosition % 4 else 4
+        for piece in @pieces
             if piece.element isnt undefined
                 piece.element.style.left = (piece.row - 1) * 96 + "px"
                 piece.element.style.top = (piece.col - 1) * 96 + "px"
