@@ -47,7 +47,7 @@ class Maze
 
     pieceClickHandler: ->
         index = parseInt @.textContent
-        if Math.abs(@pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
+        if Math.abs(maze.pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
             @move(index)
             @updatePosition()
             if @completed()
