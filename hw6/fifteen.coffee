@@ -7,7 +7,7 @@ class Piece
     constructor: (@col, @row, @id, @element)->
 
 class Maze
-    constructor: (@pieces = [], @blankPosition = 16)->
+    constructor: (@pieces = [], @blankCol = 4, @blankRow = 4)->
 
     push: (piece)->
         @pieces.push piece
@@ -24,6 +24,8 @@ class Maze
             row = 1
             while row < 5
                 piece = new Piece col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]
+                if piece.element isnt undefined
+                    piece.element.onclick = @pieceClickHandler
                 @push piece
                 row++
             col++
@@ -34,16 +36,42 @@ class Maze
                 piece.element.style.backgroundPosition = -(piece.row - 1) * 96 + "px " + -(piece.col - 1) * 96 + "px"
      
     updatePosition: ->
-        blankCol = Math.ceil @blankPosition / 4
-        blankRow = if @blankPosition % 4 then @blankPosition % 4 else 4
         for piece in @pieces
             if piece.element isnt undefined
                 piece.element.style.left = (piece.row - 1) * 96 + "px"
                 piece.element.style.top = (piece.col - 1) * 96 + "px"
-                if Math.abs(piece.row - blankRow) + Math.abs(piece.col - blankCol) > 1
+                if Math.abs(piece.row - @blankRow) + Math.abs(piece.col - @blankCol) > 1
                     piece.element.className = 'puzzlepiece'
                 else
                     piece.element.className = 'puzzlepiece movablepiece'
+
+    pieceClickHandler: ->
+        index = parseInt @.textContent
+        if Math.abs(@pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
+            @move(index)
+            @updatePosition()
+            if @completed()
+                alert 'You Win!'
+                @shuffle()
+
+    move: (index)->
+        @pieces[index - 1].col ^= @blankCol
+        @blankCol ^= @pieces[index - 1].col
+        @pieces[index - 1].col ^= @blankCol
+        @pieces[index - 1].row ^= @blankRow
+        @blankRow ^= @pieces[index - 1].row
+        @pieces[index - 1].row ^= @blankRow
+
+    completed: ->
+        index = 1
+        while index <= 15
+            if (@pieces[index - 1].col - 1) * 4 + row isnt @pieces[index - 1].id
+                return false
+            index++
+        return true
+
+    shuffle: ->
+        alert 'shuffle'
 
 maze = new Maze
 

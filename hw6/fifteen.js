@@ -15,9 +15,10 @@
   })();
 
   Maze = (function() {
-    function Maze(pieces, blankPosition) {
+    function Maze(pieces, blankCol, blankRow) {
       this.pieces = pieces != null ? pieces : [];
-      this.blankPosition = blankPosition != null ? blankPosition : 16;
+      this.blankCol = blankCol != null ? blankCol : 4;
+      this.blankRow = blankRow != null ? blankRow : 4;
     }
 
     Maze.prototype.push = function(piece) {
@@ -39,6 +40,9 @@
         row = 1;
         while (row < 5) {
           piece = new Piece(col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]);
+          if (piece.element !== void 0) {
+            piece.element.onclick = this.pieceClickHandler;
+          }
           this.push(piece);
           row++;
         }
@@ -63,9 +67,7 @@
     };
 
     Maze.prototype.updatePosition = function() {
-      var blankCol, blankRow, piece, _i, _len, _ref, _results;
-      blankCol = Math.ceil(this.blankPosition / 4);
-      blankRow = this.blankPosition % 4 ? this.blankPosition % 4 : 4;
+      var piece, _i, _len, _ref, _results;
       _ref = this.pieces;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -73,7 +75,7 @@
         if (piece.element !== void 0) {
           piece.element.style.left = (piece.row - 1) * 96 + "px";
           piece.element.style.top = (piece.col - 1) * 96 + "px";
-          if (Math.abs(piece.row - blankRow) + Math.abs(piece.col - blankCol) > 1) {
+          if (Math.abs(piece.row - this.blankRow) + Math.abs(piece.col - this.blankCol) > 1) {
             _results.push(piece.element.className = 'puzzlepiece');
           } else {
             _results.push(piece.element.className = 'puzzlepiece movablepiece');
@@ -83,6 +85,45 @@
         }
       }
       return _results;
+    };
+
+    Maze.prototype.pieceClickHandler = function() {
+      var index;
+      index = parseInt(this.textContent);
+      console.log(this.pieces[0].col);
+      if (Math.abs(this.pieces[index - 1].row - this.blankRow) + Math.abs(this.pieces[index - 1].col - this.blankCol) <= 1) {
+        this.move(index);
+        this.updatePosition();
+        if (this.completed()) {
+          alert('You Win!');
+          return this.shuffle();
+        }
+      }
+    };
+
+    Maze.prototype.move = function(index) {
+      this.pieces[index - 1].col ^= this.blankCol;
+      this.blankCol ^= this.pieces[index - 1].col;
+      this.pieces[index - 1].col ^= this.blankCol;
+      this.pieces[index - 1].row ^= this.blankRow;
+      this.blankRow ^= this.pieces[index - 1].row;
+      return this.pieces[index - 1].row ^= this.blankRow;
+    };
+
+    Maze.prototype.completed = function() {
+      var index;
+      index = 1;
+      while (index <= 15) {
+        if ((this.pieces[index - 1].col - 1) * 4 + row !== this.pieces[index - 1].id) {
+          return false;
+        }
+        index++;
+      }
+      return true;
+    };
+
+    Maze.prototype.shuffle = function() {
+      return alert('shuffle');
     };
 
     return Maze;
