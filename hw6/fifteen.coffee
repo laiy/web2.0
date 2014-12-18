@@ -25,8 +25,12 @@ class Maze
             while row < 5
                 piece = new Piece col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]
                 if piece.element isnt undefined
-                    piece.element.onclick = @pieceClickHandler
-                @push piece
+                    @push piece
+                    onePiece = @pieces[(col - 1) * 4 + row - 1]
+                    that = @
+                    ele = onePiece.element
+                    onePiece.element.onclick = (ele)->
+                        -> that.pieceClickHandler(ele)
                 row++
             col++
 
@@ -45,9 +49,10 @@ class Maze
                 else
                     piece.element.className = 'puzzlepiece movablepiece'
 
-    pieceClickHandler: ->
-        index = parseInt @.textContent
-        if Math.abs(maze.pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
+    pieceClickHandler: (ele)->
+        console.log ele
+        index = parseInt ele.textContent
+        if Math.abs(@pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
             @move(index)
             @updatePosition()
             if @completed()

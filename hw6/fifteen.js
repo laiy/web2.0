@@ -32,7 +32,7 @@
     };
 
     Maze.prototype.initializeDataStructure = function() {
-      var col, piece, pieces, row, _results;
+      var col, ele, onePiece, piece, pieces, row, that, _results;
       col = 1;
       pieces = document.getElementById('puzzlearea').getElementsByTagName('div');
       _results = [];
@@ -41,9 +41,16 @@
         while (row < 5) {
           piece = new Piece(col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]);
           if (piece.element !== void 0) {
-            piece.element.onclick = this.pieceClickHandler;
+            this.push(piece);
+            onePiece = this.pieces[(col - 1) * 4 + row - 1];
+            that = this;
+            ele = onePiece.element;
+            onePiece.element.onclick = function(ele) {
+              return function() {
+                return that.pieceClickHandler(ele);
+              };
+            }(ele);
           }
-          this.push(piece);
           row++;
         }
         _results.push(col++);
@@ -87,10 +94,10 @@
       return _results;
     };
 
-    Maze.prototype.pieceClickHandler = function() {
+    Maze.prototype.pieceClickHandler = function(ele) {
       var index;
-      index = parseInt(this.textContent);
-      console.log(this.pieces[0].col);
+      console.log(ele);
+      index = parseInt(ele.textContent);
       if (Math.abs(this.pieces[index - 1].row - this.blankRow) + Math.abs(this.pieces[index - 1].col - this.blankCol) <= 1) {
         this.move(index);
         this.updatePosition();
