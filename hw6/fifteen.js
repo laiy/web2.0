@@ -64,12 +64,6 @@
         return that.shuffle(that);
       });
       ele = document.getElementById('background-image');
-
-      /*
-      * handle onchange event
-      * using a closure, 'that' is the maze
-      * @param ele: the DOM element in DOM tree
-       */
       return ele.onchange = function() {
         return that.changeBackground(ele);
       };
@@ -78,7 +72,8 @@
 
     /*
     * initialize dataStructure of maze
-    *
+    * for each step in loop, create a piece(class Piece), and push to pieces
+    * add event handler to piece
      */
 
     Maze.prototype.initializeDataStructure = function() {
@@ -95,6 +90,12 @@
             onePiece = this.pieces[(col - 1) * 4 + row - 1];
             that = this;
             ele = onePiece.element;
+
+            /*
+            * in order to let all DOM element binding to their own piece, use a closure
+            * 'that' is maze, so that the function pieceClickHandler could execute in maze's action scope
+            * @param ele: the DOM element for piece
+             */
             onePiece.element.onclick = (function(ele) {
               return function() {
                 return that.pieceClickHandler(ele);
@@ -107,6 +108,11 @@
       }
       return _results;
     };
+
+
+    /*
+    * initialize DOM element for piece
+     */
 
     Maze.prototype.initializePieceElement = function() {
       var piece, _i, _len, _ref, _results;
@@ -122,6 +128,11 @@
       }
       return _results;
     };
+
+
+    /*
+    * update exactly where piece is in browser(syncing data and view)
+     */
 
     Maze.prototype.updatePosition = function() {
       var piece, _i, _len, _ref, _results;
@@ -144,6 +155,12 @@
       return _results;
     };
 
+
+    /*
+    * event handler for click event for piece in maze
+    * @param ele: the DOM element for piece
+     */
+
     Maze.prototype.pieceClickHandler = function(ele) {
       var index;
       index = parseInt(ele.textContent);
@@ -157,6 +174,12 @@
       }
     };
 
+
+    /*
+    * exchange pieces[index - 1] position data with blank position
+    * @param index: recording which piece to exchange, stand for the postion(index - 1) in pieces array
+     */
+
     Maze.prototype.move = function(index) {
       this.pieces[index - 1].col ^= this.blankCol;
       this.blankCol ^= this.pieces[index - 1].col;
@@ -165,6 +188,11 @@
       this.blankRow ^= this.pieces[index - 1].row;
       return this.pieces[index - 1].row ^= this.blankRow;
     };
+
+
+    /*
+    * judge whether the maze has been completed
+     */
 
     Maze.prototype.completed = function() {
       var index;
@@ -177,6 +205,12 @@
       }
       return true;
     };
+
+
+    /*
+    * shuffle the maze randomly
+    * @param that: the maze, cuz when in click event, 'this' is DOM event, not maze
+     */
 
     Maze.prototype.shuffle = function(that) {
       var changeCol, movingUp, times, _results;
@@ -195,6 +229,13 @@
       return _results;
     };
 
+
+    /*
+    * auto move randomly
+    * @param changeCol: random number(0 or 1), deside change in column position(1) or row position(0)
+    * @param movingUp: random number(0 or 1), deside moving up(1) or down(0)
+     */
+
     Maze.prototype.randomMove = function(changeCol, movingUp) {
       var col, row;
       col = this.blankCol;
@@ -212,6 +253,12 @@
       }
     };
 
+
+    /*
+    * judge whether the position is a valid one
+    * @param position: position to judge
+     */
+
     Maze.prototype.isValid = function(position) {
       if (position >= 1 && position <= 4) {
         return true;
@@ -219,6 +266,12 @@
         return false;
       }
     };
+
+
+    /*
+    * change background image
+    * @param ele: the DOM element for the selected
+     */
 
     Maze.prototype.changeBackground = function(ele) {
       var picture, piece, _i, _len, _ref, _results;
@@ -237,6 +290,11 @@
   })();
 
   maze = new Maze;
+
+
+  /*
+  * initialize maze when window is loaded
+   */
 
   window.onload = function() {
     return maze.initialize();
