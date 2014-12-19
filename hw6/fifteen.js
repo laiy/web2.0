@@ -213,9 +213,8 @@
      */
 
     Maze.prototype.shuffle = function(that) {
-      var changeCol, movingUp, times, _results;
+      var changeCol, movingUp, times;
       times = 100;
-      _results = [];
       while (times > 0) {
         changeCol = Math.round(Math.random());
         movingUp = Math.round(Math.random());
@@ -224,9 +223,9 @@
         } else {
           this.randomMove(changeCol, movingUp);
         }
-        _results.push(times--);
+        times--;
       }
-      return _results;
+      return this.updatePosition();
     };
 
 
@@ -247,8 +246,7 @@
       }
       if (col !== this.blankCol || row !== this.blankRow) {
         if ((col - 1) * 4 + row !== 16) {
-          this.move((col - 1) * 4 + row);
-          return this.updatePosition();
+          return this.move((col - 1) * 4 + row);
         }
       }
     };

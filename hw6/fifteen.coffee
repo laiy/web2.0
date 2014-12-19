@@ -145,6 +145,7 @@ class Maze
             else
                 @randomMove changeCol, movingUp
             times--
+        @updatePosition()
 
     ###
     * auto move randomly
@@ -161,7 +162,6 @@ class Maze
         if col isnt @blankCol or row isnt @blankRow
             if (col - 1) * 4 + row isnt 16
                 @move (col - 1) * 4 + row
-                @updatePosition()
 
     ###
     * judge whether the position is a valid one
