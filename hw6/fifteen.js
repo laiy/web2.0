@@ -26,9 +26,14 @@
     };
 
     Maze.prototype.initialize = function() {
+      var that;
       this.initializeDataStructure();
       this.initializePieceElement();
-      return this.updatePosition();
+      this.updatePosition();
+      that = this;
+      return document.getElementById('shufflebutton').addEventListener('click', function() {
+        return that.shuffle(that);
+      });
     };
 
     Maze.prototype.initializeDataStructure = function() {
@@ -45,11 +50,11 @@
             onePiece = this.pieces[(col - 1) * 4 + row - 1];
             that = this;
             ele = onePiece.element;
-            onePiece.element.onclick = function(ele) {
+            onePiece.element.onclick = (function(ele) {
               return function() {
                 return that.pieceClickHandler(ele);
               };
-            }(ele);
+            })(ele);
           }
           row++;
         }
@@ -96,7 +101,6 @@
 
     Maze.prototype.pieceClickHandler = function(ele) {
       var index;
-      console.log(ele);
       index = parseInt(ele.textContent);
       if (Math.abs(this.pieces[index - 1].row - this.blankRow) + Math.abs(this.pieces[index - 1].col - this.blankCol) <= 1) {
         this.move(index);
@@ -121,7 +125,7 @@
       var index;
       index = 1;
       while (index <= 15) {
-        if ((this.pieces[index - 1].col - 1) * 4 + row !== this.pieces[index - 1].id) {
+        if ((this.pieces[index - 1].col - 1) * 4 + this.pieces[index - 1].row !== this.pieces[index - 1].id) {
           return false;
         }
         index++;
@@ -129,8 +133,47 @@
       return true;
     };
 
-    Maze.prototype.shuffle = function() {
-      return alert('shuffle');
+    Maze.prototype.shuffle = function(that) {
+      var randomNumberX, randomNumberY, times, _results;
+      times = 1000;
+      _results = [];
+      while (times > 0) {
+        randomNumberX = Math.round(Math.random());
+        randomNumberY = Math.round(Math.random());
+        if (that) {
+          that.randomMove(randomNumberX, randomNumberY);
+        } else {
+          this.randomMove(randomNumberX, randomNumberY);
+        }
+        _results.push(times--);
+      }
+      return _results;
+    };
+
+    Maze.prototype.randomMove = function(randomNumberX, randomNumberY) {
+      var col, row;
+      col = this.blankCol;
+      row = this.blankRow;
+      if (randomNumberX) {
+        col = randomNumberY && this.isValid(col + 1) ? col + 1 : this.isValid(col - 1) ? col - 1 : col;
+      } else {
+        row = randomNumberY && this.isValid(row + 1) ? row + 1 : this.isValid(row - 1) ? row - 1 : row;
+      }
+      if (col !== this.blankCol || row !== this.blankRow) {
+        if ((col - 1) * 4 + row !== 16) {
+          this.move((col - 1) * 4 + row);
+          return this.updatePosition();
+        }
+      }
+    };
+
+    Maze.prototype.isValid = function(position) {
+      console.log('position' + position);
+      if (position >= 1 && position <= 4) {
+        return true;
+      } else {
+        return false;
+      }
     };
 
     return Maze;

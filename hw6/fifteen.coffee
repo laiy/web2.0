@@ -16,6 +16,9 @@ class Maze
         @initializeDataStructure()
         @initializePieceElement()
         @updatePosition()
+        that = @
+        document.getElementById('shufflebutton').addEventListener 'click', ->
+            that.shuffle(that)
 
     initializeDataStructure: ->
         col = 1
@@ -29,8 +32,9 @@ class Maze
                     onePiece = @pieces[(col - 1) * 4 + row - 1]
                     that = @
                     ele = onePiece.element
-                    onePiece.element.onclick = (ele)->
-                        -> that.pieceClickHandler(ele)
+                    onePiece.element.onclick = do (ele)->
+                        ->
+                            that.pieceClickHandler(ele)
                 row++
             col++
 
@@ -50,10 +54,9 @@ class Maze
                     piece.element.className = 'puzzlepiece movablepiece'
 
     pieceClickHandler: (ele)->
-        console.log ele
         index = parseInt ele.textContent
         if Math.abs(@pieces[index - 1].row - @blankRow) + Math.abs(@pieces[index - 1].col - @blankCol) <= 1
-            @move(index)
+            @move index
             @updatePosition()
             if @completed()
                 alert 'You Win!'
@@ -70,13 +73,37 @@ class Maze
     completed: ->
         index = 1
         while index <= 15
-            if (@pieces[index - 1].col - 1) * 4 + row isnt @pieces[index - 1].id
+            if (@pieces[index - 1].col - 1) * 4 + @pieces[index - 1].row isnt @pieces[index - 1].id
                 return false
             index++
         return true
 
-    shuffle: ->
-        alert 'shuffle'
+    shuffle: (that)->
+        times = 100
+        while times > 0
+            randomNumberX = Math.round Math.random()
+            randomNumberY = Math.round Math.random()
+            if that
+                that.randomMove(randomNumberX, randomNumberY)
+            else
+                @randomMove(randomNumberX, randomNumberY)
+            times--
+
+    randomMove: (randomNumberX, randomNumberY)->
+        col = @blankCol
+        row = @blankRow
+        if randomNumberX
+            col = if randomNumberY and @isValid(col + 1) then col + 1 else if @isValid(col - 1) then col - 1 else col
+        else
+            row = if randomNumberY and @isValid(row + 1) then row + 1 else if @isValid(row - 1) then row - 1 else row
+        if col isnt @blankCol or row isnt @blankRow
+            if (col - 1) * 4 + row isnt 16
+                @move (col - 1) * 4 + row
+                @updatePosition()
+
+    isValid: (position)->
+        console.log 'position' + position
+        return if position >= 1 and position <= 4 then true else false
 
 maze = new Maze
 
