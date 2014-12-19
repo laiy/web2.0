@@ -3,6 +3,14 @@
   var Maze, Piece, maze;
 
   Piece = (function() {
+
+    /*
+    * the part of maze, a maze is expecting to have 15 pieces
+    * @param col: the column position of piece
+    * @param row: the row position of piece
+    * @param id: the number of the piece, used as an identity(one and only)
+    * @param element: the element belong to specific piece in DOM tree
+     */
     function Piece(col, row, id, element) {
       this.col = col;
       this.row = row;
@@ -15,15 +23,36 @@
   })();
 
   Maze = (function() {
+
+    /*
+    * maze, which would encapsulate some essential methods
+    * @param pieces: the array that contain all of the piece in maze
+    * @param blankCol: recording the column position of blank in maze
+    * @param @blankRow: recording the row position of blank in maze
+     */
     function Maze(pieces, blankCol, blankRow) {
       this.pieces = pieces != null ? pieces : [];
       this.blankCol = blankCol != null ? blankCol : 4;
       this.blankRow = blankRow != null ? blankRow : 4;
     }
 
+
+    /*
+    * push a piece into pieces array
+    * @param piece: the piece to push(class Piece)
+     */
+
     Maze.prototype.push = function(piece) {
       return this.pieces.push(piece);
     };
+
+
+    /*
+    * initialize maze
+    * initialize dataStructure
+    * initialize DOM element
+    * add event listener for events
+     */
 
     Maze.prototype.initialize = function() {
       var ele, that;
@@ -35,12 +64,22 @@
         return that.shuffle(that);
       });
       ele = document.getElementById('background-image');
-      return ele.onchange = (function(ele) {
-        return function() {
-          return that.changeBackground(ele);
-        };
-      })(ele);
+
+      /*
+      * handle onchange event
+      * using a closure, 'that' is the maze
+      * @param ele: the DOM element in DOM tree
+       */
+      return ele.onchange = function() {
+        return that.changeBackground(ele);
+      };
     };
+
+
+    /*
+    * initialize dataStructure of maze
+    *
+     */
 
     Maze.prototype.initializeDataStructure = function() {
       var col, ele, onePiece, piece, pieces, row, that, _results;
