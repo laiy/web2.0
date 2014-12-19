@@ -26,14 +26,20 @@
     };
 
     Maze.prototype.initialize = function() {
-      var that;
+      var ele, that;
       this.initializeDataStructure();
       this.initializePieceElement();
       this.updatePosition();
       that = this;
-      return document.getElementById('shufflebutton').addEventListener('click', function() {
+      document.getElementById('shufflebutton').addEventListener('click', function() {
         return that.shuffle(that);
       });
+      ele = document.getElementById('background-image');
+      return ele.onchange = (function(ele) {
+        return function() {
+          return that.changeBackground(ele);
+        };
+      })(ele);
     };
 
     Maze.prototype.initializeDataStructure = function() {
@@ -134,30 +140,30 @@
     };
 
     Maze.prototype.shuffle = function(that) {
-      var randomNumberX, randomNumberY, times, _results;
-      times = 1000;
+      var changeCol, movingUp, times, _results;
+      times = 100;
       _results = [];
       while (times > 0) {
-        randomNumberX = Math.round(Math.random());
-        randomNumberY = Math.round(Math.random());
+        changeCol = Math.round(Math.random());
+        movingUp = Math.round(Math.random());
         if (that) {
-          that.randomMove(randomNumberX, randomNumberY);
+          that.randomMove(changeCol, movingUp);
         } else {
-          this.randomMove(randomNumberX, randomNumberY);
+          this.randomMove(changeCol, movingUp);
         }
         _results.push(times--);
       }
       return _results;
     };
 
-    Maze.prototype.randomMove = function(randomNumberX, randomNumberY) {
+    Maze.prototype.randomMove = function(changeCol, movingUp) {
       var col, row;
       col = this.blankCol;
       row = this.blankRow;
-      if (randomNumberX) {
-        col = randomNumberY && this.isValid(col + 1) ? col + 1 : this.isValid(col - 1) ? col - 1 : col;
+      if (changeCol) {
+        col = movingUp && this.isValid(col + 1) ? col + 1 : this.isValid(col - 1) ? col - 1 : col;
       } else {
-        row = randomNumberY && this.isValid(row + 1) ? row + 1 : this.isValid(row - 1) ? row - 1 : row;
+        row = movingUp && this.isValid(row + 1) ? row + 1 : this.isValid(row - 1) ? row - 1 : row;
       }
       if (col !== this.blankCol || row !== this.blankRow) {
         if ((col - 1) * 4 + row !== 16) {
@@ -168,12 +174,23 @@
     };
 
     Maze.prototype.isValid = function(position) {
-      console.log('position' + position);
       if (position >= 1 && position <= 4) {
         return true;
       } else {
         return false;
       }
+    };
+
+    Maze.prototype.changeBackground = function(ele) {
+      var picture, piece, _i, _len, _ref, _results;
+      picture = ele.value;
+      _ref = this.pieces;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        piece = _ref[_i];
+        _results.push(piece.element.style.backgroundImage = 'url(' + picture + ')');
+      }
+      return _results;
     };
 
     return Maze;

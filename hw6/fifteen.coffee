@@ -19,6 +19,10 @@ class Maze
         that = @
         document.getElementById('shufflebutton').addEventListener 'click', ->
             that.shuffle(that)
+        ele = document.getElementById('background-image')
+        ele.onchange = do (ele)->
+            ->
+                that.changeBackground(ele)
 
     initializeDataStructure: ->
         col = 1
@@ -81,29 +85,33 @@ class Maze
     shuffle: (that)->
         times = 100
         while times > 0
-            randomNumberX = Math.round Math.random()
-            randomNumberY = Math.round Math.random()
+            changeCol = Math.round Math.random()
+            movingUp = Math.round Math.random()
             if that
-                that.randomMove(randomNumberX, randomNumberY)
+                that.randomMove changeCol, movingUp
             else
-                @randomMove(randomNumberX, randomNumberY)
+                @randomMove changeCol, movingUp
             times--
 
-    randomMove: (randomNumberX, randomNumberY)->
+    randomMove: (changeCol, movingUp)->
         col = @blankCol
         row = @blankRow
-        if randomNumberX
-            col = if randomNumberY and @isValid(col + 1) then col + 1 else if @isValid(col - 1) then col - 1 else col
+        if changeCol
+            col = if movingUp and @isValid(col + 1) then col + 1 else if @isValid(col - 1) then col - 1 else col
         else
-            row = if randomNumberY and @isValid(row + 1) then row + 1 else if @isValid(row - 1) then row - 1 else row
+            row = if movingUp and @isValid(row + 1) then row + 1 else if @isValid(row - 1) then row - 1 else row
         if col isnt @blankCol or row isnt @blankRow
             if (col - 1) * 4 + row isnt 16
                 @move (col - 1) * 4 + row
                 @updatePosition()
 
     isValid: (position)->
-        console.log 'position' + position
         return if position >= 1 and position <= 4 then true else false
+
+    changeBackground: (ele)->
+        picture = ele.value
+        for piece in @pieces
+            piece.element.style.backgroundImage = 'url(' + picture + ')'
 
 maze = new Maze
 
