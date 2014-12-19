@@ -80,7 +80,7 @@ class Maze
     initializePieceElement: ->
         for piece in @pieces
             if piece.element isnt undefined
-                piece.element.style.backgroundPosition = -(piece.row - 1) * 96 + "px " + -(piece.col - 1) * 96 + "px"
+                piece.element.style.backgroundPosition = -(piece.row - 1) * 100 + "px " + -(piece.col - 1) * 100 + "px"
 
     ###
     * update exactly where piece is in browser(syncing data and view)
@@ -88,8 +88,8 @@ class Maze
     updatePosition: ->
         for piece in @pieces
             if piece.element isnt undefined
-                piece.element.style.left = (piece.row - 1) * 96 + "px"
-                piece.element.style.top = (piece.col - 1) * 96 + "px"
+                piece.element.style.left = (piece.row - 1) * 100 + "px"
+                piece.element.style.top = (piece.col - 1) * 100 + "px"
                 if Math.abs(piece.row - @blankRow) + Math.abs(piece.col - @blankCol) > 1
                     piece.element.className = 'puzzlepiece'
                 else

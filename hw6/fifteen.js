@@ -121,7 +121,7 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         piece = _ref[_i];
         if (piece.element !== void 0) {
-          _results.push(piece.element.style.backgroundPosition = -(piece.row - 1) * 96 + "px " + -(piece.col - 1) * 96 + "px");
+          _results.push(piece.element.style.backgroundPosition = -(piece.row - 1) * 100 + "px " + -(piece.col - 1) * 100 + "px");
         } else {
           _results.push(void 0);
         }
@@ -141,8 +141,8 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         piece = _ref[_i];
         if (piece.element !== void 0) {
-          piece.element.style.left = (piece.row - 1) * 96 + "px";
-          piece.element.style.top = (piece.col - 1) * 96 + "px";
+          piece.element.style.left = (piece.row - 1) * 100 + "px";
+          piece.element.style.top = (piece.col - 1) * 100 + "px";
           if (Math.abs(piece.row - this.blankRow) + Math.abs(piece.col - this.blankCol) > 1) {
             _results.push(piece.element.className = 'puzzlepiece');
           } else {
