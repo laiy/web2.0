@@ -81,7 +81,7 @@ class Maze
         for piece in @pieces
             if piece.element isnt undefined
                 piece.element.style.backgroundPosition = -(piece.row - 1) * 96 + "px " + -(piece.col - 1) * 96 + "px"
-     
+
     ###
     * update exactly where piece is in browser(syncing data and view)
     ###
