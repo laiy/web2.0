@@ -168,8 +168,7 @@
         this.move(index);
         this.updatePosition();
         if (this.completed()) {
-          alert('You Win!');
-          return this.shuffle();
+          return alert('You Win!');
         }
       }
     };
@@ -218,11 +217,7 @@
       while (times > 0) {
         changeCol = Math.round(Math.random());
         movingUp = Math.round(Math.random());
-        if (that) {
-          that.randomMove(changeCol, movingUp);
-        } else {
-          this.randomMove(changeCol, movingUp);
-        }
+        that.randomMove(changeCol, movingUp);
         times--;
       }
       return this.updatePosition();
@@ -244,10 +239,8 @@
       } else {
         row = movingUp && this.isValid(row + 1) ? row + 1 : this.isValid(row - 1) ? row - 1 : row;
       }
-      if (col !== this.blankCol || row !== this.blankRow) {
-        if ((col - 1) * 4 + row !== 16) {
-          return this.move((col - 1) * 4 + row);
-        }
+      if ((col !== this.blankCol || row !== this.blankRow) && (col - 1) * 4 + row !== 16) {
+        return this.move((col - 1) * 4 + row);
       }
     };
 
@@ -272,13 +265,12 @@
      */
 
     Maze.prototype.changeBackground = function(ele) {
-      var picture, piece, _i, _len, _ref, _results;
-      picture = ele.value;
+      var piece, _i, _len, _ref, _results;
       _ref = this.pieces;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         piece = _ref[_i];
-        _results.push(piece.element.style.backgroundImage = 'url(' + picture + ')');
+        _results.push(piece.element.style.backgroundImage = 'url(' + ele.value + ')');
       }
       return _results;
     };

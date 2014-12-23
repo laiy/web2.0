@@ -106,7 +106,6 @@ class Maze
             @updatePosition()
             if @completed()
                 alert 'You Win!'
-                @shuffle()
 
     ###
     * exchange pieces[index - 1] position data with blank position
@@ -140,10 +139,7 @@ class Maze
         while times > 0
             changeCol = Math.round Math.random()
             movingUp = Math.round Math.random()
-            if that
-                that.randomMove changeCol, movingUp
-            else
-                @randomMove changeCol, movingUp
+            that.randomMove changeCol, movingUp
             times--
         @updatePosition()
 
@@ -159,9 +155,8 @@ class Maze
             col = if movingUp and @isValid(col + 1) then col + 1 else if @isValid(col - 1) then col - 1 else col
         else
             row = if movingUp and @isValid(row + 1) then row + 1 else if @isValid(row - 1) then row - 1 else row
-        if col isnt @blankCol or row isnt @blankRow
-            if (col - 1) * 4 + row isnt 16
-                @move (col - 1) * 4 + row
+        if (col isnt @blankCol or row isnt @blankRow) and (col - 1) * 4 + row isnt 16
+            @move (col - 1) * 4 + row
 
     ###
     * judge whether the position is a valid one
@@ -175,9 +170,8 @@ class Maze
     * @param ele: the DOM element for the selected
     ###
     changeBackground: (ele)->
-        picture = ele.value
         for piece in @pieces
-            piece.element.style.backgroundImage = 'url(' + picture + ')'
+            piece.element.style.backgroundImage = 'url(' + ele.value + ')'
 
 maze = new Maze
 
