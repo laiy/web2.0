@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>SegmentFault</title>
+    <link rel="stylesheet" href="{{ static_url("css/index.css") }}">
+    <link rel="shortcut icon" href="//static.segmentfault.com/global/img/favicon.30f7204d.ico">
+</head>
+<body>
+	<div id="header">
+		<nav class="container">
+			<h1 class="logo">
+				<a href="/">
+					<img src="../static/images/home-logo.svg" alt="SegmentFault">				
+				</a>
+			</h1>
+			<ul>
+                {% if not name %}
+				<li>
+					<a href="/signup">注册</a>
+				</li>
+				<li>
+					<a href="/login">直接登录</a>
+				</li>
+                {% else %}
+				<li>
+                    <a href="#">{{ name }}</a>
+				</li>
+				<li>
+                    <a href="/?logout=yes">退出</a>
+				</li>
+                {% end %}
+			</ul>
+		</nav>
+	</div>
+	<div class="container" id="wrapper">
+		<p class="main-title">
+            今天，你在开发时遇到了什么问题呢？
+            <a id="goAsk" href="/ask">我要提问</a>
+        </p>
+        {% for question in questions%}
+        <div id="question-list">
+        	<section class="stream-list__item">
+                <div class="qa-rank">
+                    {% if question.votes == '0' %}
+		            <div class="votes hidden-xs">
+                        {{ question.votes }}
+		                <br />
+		                <small>投票</small>
+		            </div>
+                    {% end %}
+                    {% if question.votes > '0' %}
+		            <div class="votes hidden-xs plus">
+                        {{ question.votes }}
+		                <br />
+		                <small>投票</small>
+		            </div>
+                    {% end %}
+                    {% if question.votes < '0' %}
+		            <div class="votes hidden-xs minus">
+                        {{ question.votes }}
+		                <br />
+		                <small>投票</small>
+		            </div>
+                    {% end %}
+
+                    {% if question.status == '解决' %}
+                    <div class="answers answered solved">
+                        {{ question.answers }}
+		                <br />
+                        <small>{{ question.status }}</small>
+		            </div>
+                    {% else %}
+                        {% if question.answers == '0' %}
+                        <div class="answers">
+                            {{ question.answers }}
+                            <br />
+                            <small>{{ question.status }}</small>
+                        </div>
+                        {% else %}
+                        <div class="answers answered">
+                            {{ question.answers }}
+                            <br />
+                            <small>{{ question.status }}</small>
+                        </div>
+                        {% end %}
+                    {% end %}
+		            <div class="views hidden-xs">
+                        {{ question.views }}
+		                <br />
+		                <small>浏览</small>
+		            </div>
+		        </div>
+		        <div class="summary">
+		            <ul class="author list-inline">
+		                <li>
+                        <a href="#">{{ question.createdBy }}</a>
+		                    <span class="split"></span>
+                            <a href="#">{{ question.createdAt }}</a>
+		                </li>
+		            </ul>
+                    <h2 class="title"><a href="#">{{ question.title }}</a></h2>
+		            <ul class="taglist--inline ib"> 
+		                <li class="tagPopup">
+                        <a class="tag tag-sm" href="#" data-toggle="popover" data-original-title="android"> {{ question.category }}
+		                	</a>
+		                </li>   
+		            </ul>
+		        </div>
+		    </section>
+        </div>
+        {% end %}
+	</div>
+</body>
+</html>
