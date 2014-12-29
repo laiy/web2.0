@@ -168,11 +168,10 @@ class Maze
         for piece in @pieces
             piece.element.style.backgroundImage = 'url(' + ele.value + ')'
 
-maze = new Maze
-
 ###
 * initialize maze when window is loaded
 ###
 window.onload = ->
+    maze = new Maze
     maze.initialize()
 
