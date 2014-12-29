@@ -42,9 +42,8 @@ class Maze
         that = @
         document.getElementById('shufflebutton').addEventListener 'click', ->
             that.shuffle(that)
-        ele = document.getElementById('background-image')
-        ele.onchange = ->
-            that.changeBackground(ele)
+        document.getElementById('background-image').onchange = ->
+            that.changeBackground @
 
     ###
     * initialize dataStructure of maze
@@ -52,11 +51,11 @@ class Maze
     * add event handler to piece
     ###
     initializeDataStructure: ->
-        col = 1
+        col = 0
         pieces = document.getElementById('puzzlearea').getElementsByTagName 'div'
-        while col < 5
-            row = 1
-            while row < 5
+        while ++col < 5
+            row = 0
+            while ++row < 5
                 piece = new Piece col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]
                 if piece.element isnt undefined
                     @push piece
@@ -71,8 +70,6 @@ class Maze
                     onePiece.element.onclick = do (ele)->
                         ->
                             that.pieceClickHandler(ele)
-                row++
-            col++
 
     ###
     * initialize DOM element for piece
@@ -123,11 +120,10 @@ class Maze
     * judge whether the maze has been completed
     ###
     completed: ->
-        index = 1
-        while index <= 15
+        index = 0
+        while ++index <= 15
             if (@pieces[index - 1].col - 1) * 4 + @pieces[index - 1].row isnt @pieces[index - 1].id
                 return false
-            index++
         return true
 
     ###
@@ -136,11 +132,10 @@ class Maze
     ###
     shuffle: (that)->
         times = 100
-        while times > 0
+        while times-- > 0
             changeCol = Math.round Math.random()
             movingUp = Math.round Math.random()
             that.randomMove changeCol, movingUp
-            times--
         @updatePosition()
 
     ###

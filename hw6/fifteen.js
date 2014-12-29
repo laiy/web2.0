@@ -55,7 +55,7 @@
      */
 
     Maze.prototype.initialize = function() {
-      var ele, that;
+      var that;
       this.initializeDataStructure();
       this.initializePieceElement();
       this.updatePosition();
@@ -63,9 +63,8 @@
       document.getElementById('shufflebutton').addEventListener('click', function() {
         return that.shuffle(that);
       });
-      ele = document.getElementById('background-image');
-      return ele.onchange = function() {
-        return that.changeBackground(ele);
+      return document.getElementById('background-image').onchange = function() {
+        return that.changeBackground(this);
       };
     };
 
@@ -78,33 +77,38 @@
 
     Maze.prototype.initializeDataStructure = function() {
       var col, ele, onePiece, piece, pieces, row, that, _results;
-      col = 1;
+      col = 0;
       pieces = document.getElementById('puzzlearea').getElementsByTagName('div');
       _results = [];
-      while (col < 5) {
-        row = 1;
-        while (row < 5) {
-          piece = new Piece(col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]);
-          if (piece.element !== void 0) {
-            this.push(piece);
-            onePiece = this.pieces[(col - 1) * 4 + row - 1];
-            that = this;
-            ele = onePiece.element;
+      while (++col < 5) {
+        row = 0;
+        _results.push((function() {
+          var _results1;
+          _results1 = [];
+          while (++row < 5) {
+            piece = new Piece(col, row, (col - 1) * 4 + row, pieces[(col - 1) * 4 + row - 1]);
+            if (piece.element !== void 0) {
+              this.push(piece);
+              onePiece = this.pieces[(col - 1) * 4 + row - 1];
+              that = this;
+              ele = onePiece.element;
 
-            /*
-            * in order to let all DOM element binding to their own piece, use a closure
-            * 'that' is maze, so that the function pieceClickHandler could execute in maze's action scope
-            * @param ele: the DOM element for piece
-             */
-            onePiece.element.onclick = (function(ele) {
-              return function() {
-                return that.pieceClickHandler(ele);
-              };
-            })(ele);
+              /*
+              * in order to let all DOM element binding to their own piece, use a closure
+              * 'that' is maze, so that the function pieceClickHandler could execute in maze's action scope
+              * @param ele: the DOM element for piece
+               */
+              _results1.push(onePiece.element.onclick = (function(ele) {
+                return function() {
+                  return that.pieceClickHandler(ele);
+                };
+              })(ele));
+            } else {
+              _results1.push(void 0);
+            }
           }
-          row++;
-        }
-        _results.push(col++);
+          return _results1;
+        }).call(this));
       }
       return _results;
     };
@@ -195,12 +199,11 @@
 
     Maze.prototype.completed = function() {
       var index;
-      index = 1;
-      while (index <= 15) {
+      index = 0;
+      while (++index <= 15) {
         if ((this.pieces[index - 1].col - 1) * 4 + this.pieces[index - 1].row !== this.pieces[index - 1].id) {
           return false;
         }
-        index++;
       }
       return true;
     };
@@ -214,11 +217,10 @@
     Maze.prototype.shuffle = function(that) {
       var changeCol, movingUp, times;
       times = 100;
-      while (times > 0) {
+      while (times-- > 0) {
         changeCol = Math.round(Math.random());
         movingUp = Math.round(Math.random());
         that.randomMove(changeCol, movingUp);
-        times--;
       }
       return this.updatePosition();
     };
