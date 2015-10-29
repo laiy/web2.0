@@ -1,5 +1,5 @@
-#include<iostream>
-#include<string>
+#include <string>
+#include <iostream>
 
 #define shift(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
@@ -18,7 +18,7 @@ unsigned int b_temp;
 unsigned int c_temp;
 unsigned int d_temp;
 
-const unsigned int ti[]={
+const unsigned int ti[] = {
         0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
         0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,0x698098d8,
         0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,
@@ -31,33 +31,35 @@ const unsigned int ti[]={
         0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,0xf4292244,
         0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,
         0xffeff47d,0x85845dd1,0x6fa87e4f,0xfe2ce6e0,0xa3014314,
-        0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391};
+        0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+};
 
-const unsigned int s[]={7,12,17,22,7,12,17,22,7,12,17,22,7,
+const unsigned int s[] = {
+        7,12,17,22,7,12,17,22,7,12,17,22,7,
         12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,
         4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,
-        15,21,6,10,15,21,6,10,15,21,6,10,15,21};
+        15,21,6,10,15,21,6,10,15,21,6,10,15,21
+};
 
-const char str16[]="0123456789abcdef";
+const char str16[] = "0123456789abcdef";
 
-unsigned int* fill(std::string str)
-{
+unsigned int* fill(std::string str) {
     unsigned int num = (((str.length() + 8) * 8) / 512) + 1;
-    unsigned int *strByte = new unsigned int[num * 16];
+    str_length = num * 16;
+    unsigned int *strByte = new unsigned int[str_length];
 
-    for (unsigned int i = 0; i < num * 16; i++)
+    for (unsigned int i = 0; i < str_length; i++)
         strByte[i] = 0;
 
     for (unsigned int i = 0; i < str.length(); i++)
         strByte[i >> 2] |= (str[i]) << ((i % 4) * 8);
     strByte[str.length() >> 2] |= 0x80 << (((str.length() % 4)) * 8);
 
-    strByte[num * 16 - 2] = str.length() * 8;
+    strByte[str_length - 2] = str.length() * 8;
     return strByte;
 }
 
-void mainLoop(unsigned int M[])
-{
+void loop(unsigned int *M) {
     unsigned int f, j, tmp;
     unsigned int a = a_temp;
     unsigned int b = b_temp;
@@ -84,11 +86,9 @@ void mainLoop(unsigned int M[])
     d_temp = d + d_temp;
 }
 
-std::string changeHex(int a)
-{
+std::string int_to_hex(int a) {
     int b;
-    std::string temp;
-    std::string str = "";
+    std::string str = "", temp;
     for(int i = 0; i < 4; i++) {
         temp = "";
         b = ((a >> i * 8) % (1 << 8)) & 0xff;
@@ -99,33 +99,32 @@ std::string changeHex(int a)
     return str;
 }
 
-std::string getMD5(std::string source)
-{
+std::string get_MD5(std::string source) {
     a_temp = A;
     b_temp = B;
     c_temp = C;
     d_temp = D;
 
-    unsigned int *strByte = fill(source);
+    unsigned int *strByte = fill(source), num[16];
 
     for(unsigned int i = 0; i < str_length / 16; i += 16)
     {
-        unsigned int num[16];
         for(unsigned int j = 0; j < 16; j++)
             num[j] = strByte[i * 16 + j];
-        mainLoop(num);
+        loop(num);
     }
 
-    return changeHex(a_temp).append(changeHex(b_temp)).append(changeHex(c_temp)).append(changeHex(d_temp));
+    return int_to_hex(a_temp).append(int_to_hex(b_temp)).append(int_to_hex(c_temp)).append(int_to_hex(d_temp));
 }
 
 int main()
 {
-    std::string ss;
-    while (std::cin >> ss) {
+    std::string s, md5;
+    std::cout << "input a string and it would output the MD5" << std::endl;
+    while (std::cin >> s) {
+        md5 = get_MD5(s);
+        std::cout<< md5 << std::endl;
         std::cout << "input a string and it would output the MD5" << std::endl;
-        std::string s=getMD5(ss);
-        std::cout<< s << std::endl;
     }
     return 0;
 }
